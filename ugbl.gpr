@@ -13,6 +13,8 @@ project UGBL is
    -- Switch reference table: https://gcc.gnu.org/onlinedocs/gcc-9.4.0/gnat_ugn/Index.html
    package Compiler is
       for Default_Switches ("Ada") use (
+         "-O0",
+         "-g",
          "-fdata-sections",
          "-ffunction-sections",
          "-fstack-check",

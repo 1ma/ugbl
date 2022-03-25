@@ -8,7 +8,7 @@ package Finite_Fields is
    function Is_Prime (P : in Positive) return Boolean;
 
    type Order is new Positive
-      with Dynamic_Predicate => Order = 1 or Is_Prime (Positive (Order));
+      with Dynamic_Predicate => Is_Prime (Positive (Order));
 
    function FF_Add (A, B : in Element; O : in Order) return Element
       with Pre => A < Element (O) and B < Element (O),

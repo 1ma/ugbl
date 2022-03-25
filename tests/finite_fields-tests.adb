@@ -2,39 +2,35 @@ with AUnit.Assertions;
 
 package body Finite_Fields.Tests is
 
-   procedure Test_Finite_Field_Addition (T : in out AUnit.Test_Cases.Test_Case'Class);
-   procedure Test_Finite_Field_Addition (T : in out AUnit.Test_Cases.Test_Case'Class) is
+   procedure Test_Addition (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Addition (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
-
-      E1 : constant Element := FF_Add(44, 33, 53);
-      E2 : constant Element := FF_Add(FF_Add(17, 42, 53), 49, 53);
    begin
-      AUnit.Assertions.Assert (E1 = 24, "Addition test 1");
-      AUnit.Assertions.Assert (E2 = 2, "Addition test 2");
-   end Test_Finite_Field_Addition;
+      -- Ex2 uses field 57, but 57 is not a prime number so I picked the closest one (59).
+      AUnit.Assertions.Assert (FF_Add(44, 33, 59) = 18, "Song Appendix A, Ch1 Ex2-1");
+      AUnit.Assertions.Assert (FF_Add(FF_Add(17, 42, 59), 49, 59) = 49, "Song Appendix A, Ch1 Ex2-3");
+   end Test_Addition;
 
-   procedure Test_Finite_Field_Subtraction (T : in out AUnit.Test_Cases.Test_Case'Class);
-   procedure Test_Finite_Field_Subtraction (T : in out AUnit.Test_Cases.Test_Case'Class) is
+   procedure Test_Subtraction (T : in out AUnit.Test_Cases.Test_Case'Class);
+   procedure Test_Subtraction (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
-
-      E1 : constant Element := FF_Sub (9, 29, 53);
-      E2 : constant Element := FF_Sub (FF_Sub (52, 30, 53), 38, 53);
    begin
-      AUnit.Assertions.Assert (E1 = 33, "Subtraction test 1");
-      AUnit.Assertions.Assert (E1 = 37, "Subtraction test 2");
-   end Test_Finite_Field_Subtraction;
+      -- Ex2 uses field 57, but 57 is not a prime number so I picked the closest one (59).
+      AUnit.Assertions.Assert (FF_Sub (9, 29, 59) = 39, "Song Appendix A, Ch1 Ex2-2");
+      AUnit.Assertions.Assert (FF_Sub (FF_Sub (52, 30, 59), 38, 59) = 43, "Song Appendix A, Ch1 Ex2-4");
+   end Test_Subtraction;
 
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
-      Register_Routine (T, Test_Finite_Field_Addition'Access, "Finite Field Addition tests");
-      Register_Routine (T, Test_Finite_Field_Subtraction'Access, "Finite Field Subtraction tests");
+      Register_Routine (T, Test_Addition'Access, "addition examples");
+      Register_Routine (T, Test_Subtraction'Access, "subtraction examples");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
       pragma Unreferenced (T);
    begin
-      return AUnit.Format ("Finite_Fields");
+      return AUnit.Format ("Finite_Fields.Tests");
    end Name;
 
 end Finite_Fields.Tests;
