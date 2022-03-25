@@ -1,1 +1,1 @@
-# 1ma's GNAT Bitcoin Toolkit
+# 1ma's GNAT Bitcoin Library

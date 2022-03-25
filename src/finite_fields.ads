@@ -1,4 +1,5 @@
 package Finite_Fields is
+
    pragma Pure;
 
    type Element is mod 2**64;
