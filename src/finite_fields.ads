@@ -7,22 +7,19 @@ package Finite_Fields is
 
    function Is_Prime (P : in Positive) return Boolean;
 
-   procedure FF_Add (A, B : in Element; Order : in Positive; Sum : out Element);
-   pragma Precondition (A < Element(Order));
-   pragma Precondition (B < Element(Order));
-   pragma Precondition (Is_Prime(Order));
-   pragma Postcondition (Sum < Element(Order));
+   type Order is new Positive
+      with Dynamic_Predicate => Order = 1 or Is_Prime (Positive(Order));
 
-   procedure FF_Sub (A, B : in Element; Order : in Positive; Sub : out Element);
-   pragma Precondition (A < Element(Order));
-   pragma Precondition (B < Element(Order));
-   pragma Precondition (Is_Prime(Order));
-   pragma Postcondition (Sub < Element(Order));
+   function FF_Add (A, B : in Element; O : in Order) return Element
+      with Pre => A < Element(O) and B < Element(O),
+           Post => FF_Add'Result < Element(O);
 
-   procedure FF_Mul (A, B : in Element; Order : in Positive; Mul : out Element);
-   pragma Precondition (A < Element(Order));
-   pragma Precondition (B < Element(Order));
-   pragma Precondition (Is_Prime(Order));
-   pragma Postcondition (Mul < Element(Order));
+   function FF_Sub (A, B : in Element; O : in Order) return Element
+      with Pre => A < Element(O) and B < Element(O),
+           Post => FF_Sub'Result < Element(O);
+
+   function FF_Mul (A, B : in Element; O : in Order) return Element
+      with Pre => A < Element(O) and B < Element(O),
+           Post => FF_Mul'Result < Element(O);
 
 end Finite_Fields;

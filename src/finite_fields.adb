@@ -14,19 +14,19 @@ package body Finite_Fields is
       return True;
    end Is_Prime;
 
-   procedure FF_Add (A, B : in Element; Order : in Positive; Sum : out Element) is
+   function FF_Add (A, B : in Element; O : in Order) return Element is
    begin
-      Sum := (A + B) mod Element(Order);
+      return (A + B) mod Element(O);
    end FF_Add;
 
-   procedure FF_Sub (A, B : in Element; Order : in Positive; Sub : out Element) is
+   function FF_Sub (A, B : in Element; O : in Order) return Element is
    begin
-      Sub := (A - B) mod Element(Order);
+      return (A - B) mod Element(O);
    end FF_Sub;
 
-   procedure FF_Mul (A, B : in Element; Order : in Positive; Mul : out Element) is
+   function FF_Mul (A, B : in Element; O : in Order) return Element is
    begin
-      Mul := (A * B) mod Element(Order);
+      return (A * B) mod Element(O);
    end FF_Mul;
 
 end Finite_Fields;
