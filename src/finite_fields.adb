@@ -20,11 +20,8 @@ package body Finite_Fields is
    end FF_Add;
 
    function FF_Sub (A, B : in Element; O : in Order) return Element is
-      A_LLI : constant Long_Long_Integer := Long_Long_Integer (A);
-      B_LLI : constant Long_Long_Integer := Long_Long_Integer (B);
-      O_LLI : constant Long_Long_Integer := Long_Long_Integer (O);
    begin
-      return Element ((A_LLI - B_LLI) mod O_LLI);
+      return (A - B) mod Element (O);
    end FF_Sub;
 
    function FF_Mul (A, B : in Element; O : in Order) return Element is
