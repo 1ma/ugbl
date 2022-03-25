@@ -1,9 +1,9 @@
-with "./gbt.gpr";
+with "./ugbt.gpr";
 with "./vendor/aunit/lib/gnat/aunit.gpr";
 
-project GBT_Tests is
+project UGBT_Tests is
 
-   for Main use ("gbt_tests");
+   for Main use ("ugbt_tests");
 
    for Exec_Dir    use "./out";
    for Object_Dir  use "./obj";
@@ -11,4 +11,4 @@ project GBT_Tests is
 
    for Create_Missing_Dirs use "True";
 
-end GBT_Tests;
+end UGBT_Tests;

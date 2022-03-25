@@ -6,7 +6,7 @@ with AUnit.Test_Cases;
 with AUnit.Test_Suites;
 with Finite_Fields.Tests;
 
-procedure GBT_Tests is
+procedure UGBT_Tests is
    function GBT_Test_Suite return AUnit.Test_Suites.Access_Test_Suite;
    function GBT_Test_Suite return AUnit.Test_Suites.Access_Test_Suite is
       FF_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Finite_Fields.Tests.Test;
@@ -30,4 +30,4 @@ begin
    if Result /= AUnit.Status'(Success) then
       Ada.Command_Line.Set_Exit_Status (1);
    end if;
-end GBT_Tests;
+end UGBT_Tests;
