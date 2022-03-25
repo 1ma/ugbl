@@ -2,23 +2,19 @@ package Finite_Fields is
 
    pragma Pure;
 
-   type Element is new Integer;
+   function Is_Prime (P : in Integer) return Boolean
+      with Pre => P > 1;
 
-   function Is_Prime (P : in Positive) return Boolean;
+   type Order is new Integer range 2 .. Integer'Last
+      with Dynamic_Predicate => Is_Prime (Integer (Order));
 
-   type Order is new Positive
-      with Dynamic_Predicate => Is_Prime (Positive (Order));
+   function FF_Add (A, B : in Integer; O : in Order) return Integer
+      with Post => FF_Add'Result >= 0 and FF_Add'Result < Integer (O);
 
-   function FF_Add (A, B : in Element; O : in Order) return Element
-      with Pre => A < Element (O) and B < Element (O),
-           Post => FF_Add'Result >= 0 and FF_Add'Result < Element (O);
+   function FF_Sub (A, B : in Integer; O : in Order) return Integer
+      with Post => FF_Sub'Result >= 0 and FF_Sub'Result < Integer (O);
 
-   function FF_Sub (A, B : in Element; O : in Order) return Element
-      with Pre => A < Element (O) and B < Element (O),
-           Post => FF_Sub'Result >= 0 and FF_Sub'Result < Element (O);
-
-   function FF_Mul (A, B : in Element; O : in Order) return Element
-      with Pre => A < Element (O) and B < Element (O),
-           Post => FF_Mul'Result >= 0 and FF_Mul'Result < Element (O);
+   function FF_Mul (A, B : in Integer; O : in Order) return Integer
+      with Post => FF_Mul'Result >= 0 and FF_Mul'Result < Integer (O);
 
 end Finite_Fields;
