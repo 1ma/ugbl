@@ -16,17 +16,17 @@ package body Finite_Fields is
 
    function FF_Add (A, B : in Element; O : in Order) return Element is
    begin
-      return (A + B) mod Element(O);
+      return (A + B) mod Element (O);
    end FF_Add;
 
    function FF_Sub (A, B : in Element; O : in Order) return Element is
    begin
-      return (A - B) mod Element(O);
+      return (A - B) mod Element (O);
    end FF_Sub;
 
    function FF_Mul (A, B : in Element; O : in Order) return Element is
    begin
-      return (A * B) mod Element(O);
+      return (A * B) mod Element (O);
    end FF_Mul;
 
 end Finite_Fields;
