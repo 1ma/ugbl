@@ -1,0 +1,3 @@
+[submodule "vendor/aunit"]
+	path = vendor/aunit
+	url = https://github.com/AdaCore/AUnit
