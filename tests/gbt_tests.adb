@@ -9,11 +9,11 @@ with Finite_Fields.Tests;
 procedure GBT_Tests is
    function GBT_Test_Suite return AUnit.Test_Suites.Access_Test_Suite;
    function GBT_Test_Suite return AUnit.Test_Suites.Access_Test_Suite is
-      Finite_Fields_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Finite_Fields.Tests.Test;
+      FF_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Finite_Fields.Tests.Test;
 
       Suite : constant AUnit.Test_Suites.Access_Test_Suite := new AUnit.Test_Suites.Test_Suite;
    begin
-      Suite.Add_Test (Finite_Fields_Tests);
+      Suite.Add_Test (FF_Tests);
 
       return Suite;
    end GBT_Test_Suite;

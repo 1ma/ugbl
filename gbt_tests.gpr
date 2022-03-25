@@ -3,11 +3,11 @@ with "./vendor/aunit/lib/gnat/aunit.gpr";
 
 project GBT_Tests is
 
-   for Main use ("gbt_tests.adb");
+   for Main use ("gbt_tests");
 
    for Exec_Dir    use "./out";
    for Object_Dir  use "./obj";
-   for Source_Dirs use (".", "./tests");
+   for Source_Dirs use ("./tests");
 
    for Create_Missing_Dirs use "True";
 
