@@ -24,7 +24,7 @@ project UGBL is
          "-gnatVa",
          "-gnatwa",
          "-gnatwe",
-         "-gnatyy"
+         "-gnatyy-m"
       );
    end Compiler;
 

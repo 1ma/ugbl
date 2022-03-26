@@ -19,7 +19,13 @@ project UGBL_Tests is
          "-fdata-sections",
          "-ffunction-sections",
          "-fstack-check",
-         "-gnat2012"
+         "-gnat2012",
+         "-gnata",      -- TODO test if omitting this does not indeed trigger the Pre/Post conditions
+         "-gnateE",
+         "-gnatVa",
+         "-gnatwa",
+         "-gnatwe",
+         "-gnatyy-m"
       );
    end Compiler;
 
