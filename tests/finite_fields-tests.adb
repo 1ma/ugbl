@@ -38,7 +38,6 @@ package body Finite_Fields.Tests is
       AUnit.Assertions.Assert (13 = FF_Mul (FF_Exp (4, -4, 31), 11, 31), "Song Appendix A, Ch1 Ex8-3");
    end Test_Exp_And_Div;
 
-
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
