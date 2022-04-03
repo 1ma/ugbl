@@ -41,10 +41,10 @@ package body Finite_Fields.Tests is
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
-      Register_Routine (T, Test_Addition'Access, "addition examples");
-      Register_Routine (T, Test_Subtraction'Access, "subtraction examples");
-      Register_Routine (T, Test_Multiplication'Access, "multiplication examples");
-      Register_Routine (T, Test_Exp_And_Div'Access, "exponentiation and division examples");
+      Register_Routine (T, Test_Addition'Access, "Test_Addition");
+      Register_Routine (T, Test_Subtraction'Access, "Test_Subtraction");
+      Register_Routine (T, Test_Multiplication'Access, "Test_Multiplication");
+      Register_Routine (T, Test_Exp_And_Div'Access, "Test_Exp_And_Div");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is

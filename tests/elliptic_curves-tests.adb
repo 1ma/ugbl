@@ -32,7 +32,7 @@ package body Elliptic_Curves.Tests is
    overriding procedure Register_Tests (T : in out Test) is
       use AUnit.Test_Cases.Registration;
    begin
-      Register_Routine (T, Test_Points_On_Curve'Access, "Tests a few real points on a made up curve");
+      Register_Routine (T, Test_Points_On_Curve'Access, "Test_Points_On_Curve");
    end Register_Tests;
 
    overriding function Name (T : Test) return AUnit.Message_String is
