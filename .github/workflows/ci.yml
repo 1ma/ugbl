@@ -1,0 +1,15 @@
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ada-actions/toolchain@ce2021
+        with:
+          distrib: community
+          target: native
+      - run: gprbuild -j$(nproc) ugbl_tests.gpr
+      - run: ./out/ugbl_tests
