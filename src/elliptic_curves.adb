@@ -14,6 +14,14 @@ package body Elliptic_Curves is
 
    function "+" (L, R : On_Curve_Point) return On_Curve_Point is
    begin
+      if L in Point_At_Infinity then
+         return R;
+      end if;
+
+      if R in Point_At_Infinity then
+         return L;
+      end if;
+
       --  TODO
       return L;
    end "+";
