@@ -4,7 +4,7 @@ package body Elliptic_Curves is
    begin
       return
          (P.X = null and P.Y = null) or else
-         P.Y.all * P.Y.all = P.X.all * P.X.all * P.X.all + P.A * P.X.all + P.B;
+         ((P.X /= null and P.Y /= null) and P.Y.all * P.Y.all = P.X.all * P.X.all * P.X.all + P.A * P.X.all + P.B);
    end On_Curve;
 
    function On_Same_Curve (P, Q : On_Curve_Point) return Boolean is
