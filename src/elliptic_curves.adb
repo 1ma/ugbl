@@ -22,6 +22,14 @@ package body Elliptic_Curves is
          return L;
       end if;
 
+      if L.X = R.X and L.Y /= R.Y then
+         declare
+            PAI : constant Point_At_Infinity := (null, null, L.A, L.B);
+         begin
+            return PAI;
+         end;
+      end if;
+
       --  TODO
       return L;
    end "+";
