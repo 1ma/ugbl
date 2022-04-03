@@ -1,8 +1,21 @@
 package body Elliptic_Curves is
 
-   function On_Demo_Curve (X, Y : Integer_Access) return Boolean is
+   function On_Curve (P : Free_Point) return Boolean is
    begin
-      return Y.all * Y.all = X.all * X.all * X.all + 5 * X.all + 7;
-   end On_Demo_Curve;
+      return
+         (P.X = null and P.Y = null) or else
+         P.Y.all * P.Y.all = P.X.all * P.X.all * P.X.all + P.A * P.X.all + P.B;
+   end On_Curve;
+
+   function On_Same_Curve (P, Q : On_Curve_Point) return Boolean is
+   begin
+      return P.A = Q.A and P.B = Q.B;
+   end On_Same_Curve;
+
+   function "+" (L, R : On_Curve_Point) return On_Curve_Point is
+   begin
+      --  TODO
+      return L;
+   end "+";
 
 end Elliptic_Curves;

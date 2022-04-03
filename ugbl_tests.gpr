@@ -29,4 +29,8 @@ project UGBL_Tests is
       );
    end Compiler;
 
+   package Binder is
+      for Switches ("Ada") use ("-Es"); --  Symbolic traceback
+   end Binder;
+
 end UGBL_Tests;
