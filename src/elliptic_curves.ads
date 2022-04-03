@@ -22,6 +22,8 @@ package Elliptic_Curves is
    --  The Dynamic_Predicate enforces that "X is null <==> Y is null" and "X is float <==> Y is float"
    --  This guarantees that for each Free_Point either X and Y will be null or none will.
 
+   overriding function "=" (L, R : Free_Point) return Boolean;
+
    function At_Infinity (P : Free_Point) return Boolean;
 
    function On_Curve (P : Free_Point) return Boolean;

@@ -8,6 +8,11 @@ package body Elliptic_Curves is
       return abs (L - R) < Cmp_Epsilon;
    end "=";
 
+   overriding function "=" (L, R : Free_Point) return Boolean is
+   begin
+      return L.A = R.A and L.B = R.B and ((L.X = null and R.X = null) or else (L.X.all = R.X.all and L.Y.all = R.Y.all));
+   end "=";
+
    function At_Infinity (P : Free_Point) return Boolean is
    begin
       return P.X = null and P.Y = null;
@@ -41,8 +46,32 @@ package body Elliptic_Curves is
          end;
       end if;
 
-      --  TODO
-      return L;
+      if L = R then
+         if L.Y.all = 0.0 then
+            declare
+               PAI : constant Point_At_Infinity := (null, null, L.A, L.B);
+            begin
+               return PAI;
+            end;
+         end if;
+         declare
+            Slope : constant Checked_Float := (3.0 * L.X.all * L.X.all + L.A) / (2.0 * L.Y.all);
+            New_X : constant Float_Access := new Checked_Float'(Slope * Slope - 2.0 * L.X.all);
+            New_Y : constant Float_Access := new Checked_Float'(Slope * (L.X.all - New_X.all) - L.Y.all);
+            L_Plus_R : constant On_Curve_Point := (New_X, New_Y, L.A, L.B);
+         begin
+            return L_Plus_R;
+         end;
+      end if;
+
+      declare
+         Slope : constant Checked_Float := (R.Y.all - L.Y.all) / (R.X.all - L.X.all);
+         New_X : constant Float_Access := new Checked_Float'(Slope * Slope - L.X.all - R.X.all);
+         New_Y : constant Float_Access := new Checked_Float'(Slope * (L.X.all - New_X.all) - L.Y.all);
+         L_Plus_R : constant On_Curve_Point := (New_X, New_Y, L.A, L.B);
+      begin
+         return L_Plus_R;
+      end;
    end "+";
 
 end Elliptic_Curves;
