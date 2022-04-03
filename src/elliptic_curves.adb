@@ -1,8 +1,8 @@
 package body Elliptic_Curves is
 
-   function On_Secp256k1_Curve (X, Y : Integer) return Boolean is
+   function On_Demo_Curve (X, Y : Integer_Access) return Boolean is
    begin
-      return Y * Y = X * X * X + 5 * X + 7;
-   end On_Secp256k1_Curve;
+      return Y.all * Y.all = X.all * X.all * X.all + 5 * X.all + 7;
+   end On_Demo_Curve;
 
 end Elliptic_Curves;

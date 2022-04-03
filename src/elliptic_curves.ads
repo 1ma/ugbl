@@ -1,7 +1,7 @@
 package Elliptic_Curves is
 
-   pragma Pure;
+   type Integer_Access is access Integer;
 
-   function On_Secp256k1_Curve (X, Y : Integer) return Boolean;
+   function On_Demo_Curve (X, Y : Integer_Access) return Boolean;
 
 end Elliptic_Curves;
