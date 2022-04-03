@@ -1,5 +1,13 @@
 package body Elliptic_Curves is
 
+   Cmp_Epsilon : constant Checked_Float := 0.000001;
+   --  An arbitrary cutout point to safely compare Checked_Floats.
+
+   overriding function "=" (L, R : Checked_Float) return Boolean is
+   begin
+      return abs (L - R) < Cmp_Epsilon;
+   end "=";
+
    function On_Curve (P : Free_Point) return Boolean is
    begin
       return
@@ -7,9 +15,9 @@ package body Elliptic_Curves is
          ((P.X /= null and P.Y /= null) and P.Y.all * P.Y.all = P.X.all * P.X.all * P.X.all + P.A * P.X.all + P.B);
    end On_Curve;
 
-   function On_Same_Curve (P, Q : On_Curve_Point) return Boolean is
+   function On_Same_Curve (L, R : On_Curve_Point) return Boolean is
    begin
-      return P.A = Q.A and P.B = Q.B;
+      return L.A = R.A and L.B = R.B;
    end On_Same_Curve;
 
    function "+" (L, R : On_Curve_Point) return On_Curve_Point is
