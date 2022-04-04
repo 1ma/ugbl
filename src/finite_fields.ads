@@ -2,6 +2,12 @@ package Finite_Fields is
 
    pragma Pure;
 
+   type UInt_64 is mod 2 ** 64;
+   for UInt_64'Size use 64;
+   pragma Provide_Shift_Operators (UInt_64);
+
+   type UInt_256 is array (1 .. 4) of UInt_64;
+
    function Is_Prime (P : Integer) return Boolean
       with Pre => P > 1;
 
