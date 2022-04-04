@@ -8,6 +8,13 @@ package Finite_Fields is
 
    type UInt_256 is array (1 .. 4) of UInt_64;
 
+   SECP256K1_Order_P : constant UInt_256 := (16#FFFF_FFFF_FFFF_FFFF#, 16#FFFF_FFFF_FFFF_FFFF#, 16#FFFF_FFFF_FFFF_FFFF#, 16#FFFF_FFFE_FFFF_FC2F#);
+
+   function "<" (L, R : UInt_256) return Boolean;
+
+   subtype SECP256K1_Element is UInt_256
+      with Dynamic_Predicate => SECP256K1_Element < SECP256K1_Order_P;
+
    function Is_Prime (P : Integer) return Boolean
       with Pre => P > 1;
 

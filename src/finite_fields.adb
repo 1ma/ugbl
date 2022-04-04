@@ -1,5 +1,12 @@
 package body Finite_Fields is
 
+   function "<" (L, R : UInt_256) return Boolean is
+      pragma Unreferenced (L, R);
+   begin
+      --  TODO
+      return True;
+   end "<";
+
    function Is_Prime (P : Integer) return Boolean is
       I : Integer := 2;
    begin
