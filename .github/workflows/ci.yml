@@ -7,9 +7,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - uses: ada-actions/toolchain@ce2021
-        with:
-          distrib: community
-          target: native
-      - run: gprbuild -j$(nproc) ugbl_tests.gpr
+      - run: |
+          sudo apt update
+          sudo apt install gnat gprbuild
+      - run: gprbuild -v -j$(nproc) ugbl_tests.gpr
       - run: ./out/ugbl_tests
