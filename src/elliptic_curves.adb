@@ -55,6 +55,8 @@ package body Elliptic_Curves is
       begin
          return L_Plus_R;
       end;
+   exception
+      when Constraint_Error => raise Constraint_Error with "a ber estudiao";
    end "+";
 
 end Elliptic_Curves;
