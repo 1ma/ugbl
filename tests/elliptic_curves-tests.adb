@@ -4,7 +4,7 @@ package body Elliptic_Curves.Tests is
 
    function Make_Point (X, Y : Checked_Float) return On_Curve_Point;
    function Make_Point (X, Y : Checked_Float) return On_Curve_Point is
-      --  All examples and exercises of Ch2 are based on the y**2 = x**3 + 5x + 7 elliptic curve (which is not secp256k1)
+      --  All examples and exercises of J.Song Ch.2 are based on the y^2 = x^3 + 5x + 7 elliptic curve (which is not secp256k1)
       New_Testing_Point : constant On_Curve_Point := (X, Y, 5.0, 7.0);
    begin
       return New_Testing_Point;
@@ -28,13 +28,12 @@ package body Elliptic_Curves.Tests is
 
    procedure Test_Points_On_Curve (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Points_On_Curve (T : in out AUnit.Test_Cases.Test_Case'Class) is
-      pragma Unreferenced (T);
-      P_1 : constant On_Curve_Point := Make_Point (-1.0, -1.0);
-      P_2 : constant On_Curve_Point := Make_Point (18.0, 77.0);
-      pragma Unreferenced (P_1, P_2);
+      P_1 : constant On_Curve_Point := Make_Point (-1.0, -1.0); -- J.Song App.A Ch.2 Ex 1.2 (correctness implicitly checked by type predicate)
+      P_2 : constant On_Curve_Point := Make_Point (18.0, 77.0); -- J.Song App.A Ch.2 Ex 1.3 (correctness implicitly checked by type predicate)
+      pragma Unreferenced (T, P_1, P_2);
    begin
-      AUnit.Assertions.Assert_Exception (Invalid_Point_Instantiation_1'Access, "Song Appendix A, Ch2 Ex1-1");
-      AUnit.Assertions.Assert_Exception (Invalid_Point_Instantiation_2'Access, "Song Appendix A, Ch2 Ex1-4");
+      AUnit.Assertions.Assert_Exception (Invalid_Point_Instantiation_1'Access, "J.Song App.A Ch.2 Ex 1.1");
+      AUnit.Assertions.Assert_Exception (Invalid_Point_Instantiation_2'Access, "J.Song App.A Ch.2 Ex 1.4");
    end Test_Points_On_Curve;
 
    procedure Test_Point_Addition (T : in out AUnit.Test_Cases.Test_Case'Class);
@@ -45,11 +44,11 @@ package body Elliptic_Curves.Tests is
       P_2 : constant On_Curve_Point := Make_Point (-1.0, 1.0);
       P_3 : constant On_Curve_Point := Make_Point (2.0, 5.0);
    begin
-      AUnit.Assertions.Assert (P_1 = P_1 + PAI, "Song Ch2 p33, P + Inf = P");
-      AUnit.Assertions.Assert (P_2 = PAI + P_2, "Song Ch2 p34, Inf + P = P");
-      AUnit.Assertions.Assert (PAI = P_1 + P_2, "Song Ch2 p34, P + (-P) = Inf");
-      AUnit.Assertions.Assert (Make_Point (3.0, -7.0) = P_3 + P_1, "Song Appendix A Ch2 Ex4, (2, 5) + (-1, -1) = (3, -7) on y**2 = x**3 + 5x + 7");
-      AUnit.Assertions.Assert (Make_Point (18.0, 77.0) = P_1 + P_1, "Song Appendix A Ch2 Ex6, (-1, -1) + (-1, -1) = (18, 77) on y**2 = x**3 + 5x + 7");
+      AUnit.Assertions.Assert (P_1 = P_1 + PAI, "J.Song Ch.2 p33, P + Inf = P");
+      AUnit.Assertions.Assert (P_2 = PAI + P_2, "J.Song Ch.2 p34, Inf + P = P");
+      AUnit.Assertions.Assert (PAI = P_1 + P_2, "J.Song Ch.2 p34, P + (-P) = Inf");
+      AUnit.Assertions.Assert (Make_Point (3.0, -7.0) = P_3 + P_1, "J.Song App.A Ch.2 Ex 4");
+      AUnit.Assertions.Assert (Make_Point (18.0, 77.0) = P_1 + P_1, "J.Song App.A Ch.2 Ex 6");
    end Test_Point_Addition;
 
    overriding procedure Register_Tests (T : in out Test) is

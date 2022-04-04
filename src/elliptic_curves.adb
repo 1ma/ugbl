@@ -1,7 +1,7 @@
 package body Elliptic_Curves is
 
    Cmp_Epsilon : constant Checked_Float := 0.000001;
-   --  An arbitrary cutout point for crude Checked_Floats comparisons.
+   --  An arbitrary cutout point for crude Checked_Float comparisons.
 
    overriding function "=" (L, R : Checked_Float) return Boolean is
    begin
