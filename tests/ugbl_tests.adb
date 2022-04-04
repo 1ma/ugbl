@@ -1,5 +1,4 @@
 with Ada.Command_Line;
-with AUnit; use AUnit;
 with AUnit.Reporter.Text;
 with AUnit.Run;
 with AUnit.Test_Cases;
@@ -8,6 +7,8 @@ with Elliptic_Curves.Tests;
 with Finite_Fields.Tests;
 
 procedure UGBL_Tests is
+   use type AUnit.Status;
+
    function UGBL_Test_Suite return AUnit.Test_Suites.Access_Test_Suite;
    function UGBL_Test_Suite return AUnit.Test_Suites.Access_Test_Suite is
       FF_Tests : constant AUnit.Test_Cases.Test_Case_Access := new Finite_Fields.Tests.Test;
@@ -30,7 +31,7 @@ begin
 
    Result := Runner (Reporter);
 
-   if Result /= AUnit.Status'(Success) then
+   if Result /= AUnit.Status'(AUnit.Success) then
       Ada.Command_Line.Set_Exit_Status (1);
    end if;
 end UGBL_Tests;

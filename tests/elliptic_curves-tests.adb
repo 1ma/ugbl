@@ -5,14 +5,14 @@ package body Elliptic_Curves.Tests is
    function Make_Point (X, Y : Checked_Float) return On_Curve_Point;
    function Make_Point (X, Y : Checked_Float) return On_Curve_Point is
       --  All examples and exercises of Ch2 are based on the y**2 = x**3 + 5x + 7 elliptic curve (which is not secp256k1)
-      New_Testing_Point : constant On_Curve_Point := (new Checked_Float'(X), new Checked_Float'(Y), 5.0, 7.0);
+      New_Testing_Point : constant On_Curve_Point := (X, Y, 5.0, 7.0);
    begin
       return New_Testing_Point;
    end Make_Point;
 
    procedure Invalid_Point_Instantiation_1;
    procedure Invalid_Point_Instantiation_1 is
-      P : constant On_Curve_Point := (new Checked_Float'(2.0), new Checked_Float'(4.0), 5.0, 7.0);
+      P : constant On_Curve_Point := (2.0, 4.0, 5.0, 7.0);
       pragma Unreferenced (P);
    begin
       null;
@@ -20,7 +20,7 @@ package body Elliptic_Curves.Tests is
 
    procedure Invalid_Point_Instantiation_2;
    procedure Invalid_Point_Instantiation_2 is
-      P : constant On_Curve_Point := (new Checked_Float'(5.0), new Checked_Float'(7.0), 5.0, 7.0);
+      P : constant On_Curve_Point := (5.0, 7.0, 5.0, 7.0);
       pragma Unreferenced (P);
    begin
       null;
@@ -40,7 +40,7 @@ package body Elliptic_Curves.Tests is
    procedure Test_Point_Addition (T : in out AUnit.Test_Cases.Test_Case'Class);
    procedure Test_Point_Addition (T : in out AUnit.Test_Cases.Test_Case'Class) is
       pragma Unreferenced (T);
-      PAI : constant Point_At_Infinity := (null, null, 5.0, 7.0);
+      PAI : constant Point_At_Infinity := (Checked_Float'Last, Checked_Float'Last, 5.0, 7.0);
       P_1 : constant On_Curve_Point := Make_Point (-1.0, -1.0);
       P_2 : constant On_Curve_Point := Make_Point (-1.0, 1.0);
       P_3 : constant On_Curve_Point := Make_Point (2.0, 5.0);
