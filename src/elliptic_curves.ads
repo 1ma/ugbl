@@ -8,8 +8,7 @@ package Elliptic_Curves is
 
    overriding function "=" (L, R : Checked_Float) return Boolean;
 
-   subtype Infinity is Checked_Float
-      with Dynamic_Predicate => Infinity = Checked_Float'Last;
+   subtype Infinity is Checked_Float range Checked_Float'Last .. Checked_Float'Last;
    --  Checked_Float'Last is approximately 1.79769313486232E+308
    --  This is *conceptually WRONG* but this is throwaway code anyway and it'd rather forgo the pointerolade.
 
