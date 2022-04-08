@@ -1,3 +1,6 @@
 [submodule "3rdparty/aunit"]
 	path = 3rdparty/aunit
 	url = https://github.com/AdaCore/AUnit
+[submodule "3rdparty/SPARKNaCl"]
+	path = 3rdparty/SPARKNaCl
+	url = https://github.com/rod-chapman/SPARKNaCl
