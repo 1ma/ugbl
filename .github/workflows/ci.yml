@@ -10,5 +10,5 @@ jobs:
       - run: |
           sudo apt update
           sudo apt install gnat gprbuild
-      - run: gprbuild -v -j$(nproc) ugbl_tests.gpr
+      - run: gprbuild -v -Xmode=debug -j$(nproc) ugbl_tests.gpr
       - run: ./out/ugbl_tests

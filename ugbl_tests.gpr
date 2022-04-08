@@ -1,4 +1,5 @@
 with "./3rdparty/aunit/lib/gnat/aunit.gpr";
+with "./3rdparty/ffa_ch1_genesis/ffa/libffa/ffa.gpr";
 with "./ugbl.gpr";
 
 project UGBL_Tests is
