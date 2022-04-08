@@ -1,0 +1,1075 @@
+diff -uNr a/ffa/README b/ffa/README
+--- a/ffa/README false
++++ b/ffa/README 33552678f5519339c5beaec7c62a4f43d2d32ff9620090a6866c056a13c369ee4689263c306102d675622ef9742fa3943698533c3a6407a65ec6036992e8df96
+@@ -0,0 +1,27 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++See contents of 'demo'.
++
++
++Questions?
++
++http://webchat.freenode.net/?channels=#trilema&nick=from_ffa
++
++Privmsg one of the people speaking and ask politely for 'voice'.
+diff -uNr a/ffa/ffademo/README b/ffa/ffademo/README
+--- a/ffa/ffademo/README false
++++ b/ffa/ffademo/README ad4bcd1c0f26fdae13316825f8ad112744491727d35d0645bba892dde1dca9cc13feb756ea2bf673245daa6e027386e896e5d2975f3a53949eb210571997e9d2
+@@ -0,0 +1,47 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++to clean:
++gprclean
++
++to build:
++gprbuild
++
++to build debug, or on crapple:
++gprbuild -Xmode=debug
++
++
++'libffa' will build recursively.
++
++to run:
++./bin/ffa_demo
++
++
++Chapter 1 demo output should look like this:
++
++X         =
++0000000000000000000000000000000000000000000000000000000000000000
++Y         =
++0000000000000000000000000000000000000000000000000000000000005555
++X + Y     =
++0000000000000000000000000000000000000000000000000000000000005555
++C         =  0
++X - Y     =
++FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFAAAB
++C         =  1
+diff -uNr a/ffa/ffademo/bin/README b/ffa/ffademo/bin/README
+--- a/ffa/ffademo/bin/README false
++++ b/ffa/ffademo/bin/README 5fdbae897eb301a711bf95707f329517db540e34c182a5beec96e93d5d0d856cec2ed6b01c1191f865e8d1c45709a462c70c3005d4aa3676eb445d1479edf2e5
+@@ -0,0 +1 @@
++Placeholder.
+diff -uNr a/ffa/ffademo/demo_ch1.adb b/ffa/ffademo/demo_ch1.adb
+--- a/ffa/ffademo/demo_ch1.adb false
++++ b/ffa/ffademo/demo_ch1.adb 5220f733b82acdcd95b2806401322ed4657325e6d3d4f1264cfd390c304b900f6a8b1555eb48ddd966ece7ef91bd120e54972873817a8e8e94b84bd62dd7196a
+@@ -0,0 +1,69 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++-- From Ada:
++with Ada.Text_IO; use Ada.Text_IO;
++
++-- From FFA:
++with Words;    use Words;
++with FZ_Type;  use FZ_Type;
++with FZ_Arith; use FZ_Arith;
++
++-- From the Demo:
++with FFA_IO;   use FFA_IO;
++
++
++package body Demo_Ch1 is
++
++   procedure Demo_Add_Sub is
++      
++      -- We are using 64-bit Words (see iron.ads).
++      -- We'll begin with an elementary demo, using 256-bit FZ:
++      X : FZ(1 .. 4) := (0,        0, 0, 0);
++      Y : FZ(1 .. 4) := (16#5555#, 0, 0, 0);
++      Z : FZ(1 .. 4) := (0,        0, 0, 0);
++      
++      -- Carry.
++      C : WBool := 0;
++      
++   begin
++      
++      Put_Line("X         =");
++      Dump(X);
++      New_Line;
++      
++      Put_Line("Y         =");
++      Dump(Y);
++      New_Line;
++      
++      FZ_Add(X, Y, Z, C);
++      Put_Line("X + Y     =");
++      Dump(Z);
++      New_Line;
++      Put_Line("C         = " & WBool'Image(C));
++      
++      FZ_Sub(X, Y, Z, C);
++      Put_Line("X - Y     =");
++      Dump(Z);
++      New_Line;
++      Put_Line("C         = " & WBool'Image(C));
++      
++   end Demo_Add_Sub;
++      
++end Demo_Ch1;
+diff -uNr a/ffa/ffademo/demo_ch1.ads b/ffa/ffademo/demo_ch1.ads
+--- a/ffa/ffademo/demo_ch1.ads false
++++ b/ffa/ffademo/demo_ch1.ads 1959cda0f5a15b35a1e5b050978162e9522f3885881f98eaff4bbda4b314e49a6cecd3e938f4c894e1e18c64cce7e704c63bc867ff8d5e0ac37161365b6b4b31
+@@ -0,0 +1,24 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++package Demo_Ch1 is
++   
++   procedure Demo_Add_Sub;
++   
++end Demo_Ch1;
+diff -uNr a/ffa/ffademo/ffa_demo.adb b/ffa/ffademo/ffa_demo.adb
+--- a/ffa/ffademo/ffa_demo.adb false
++++ b/ffa/ffademo/ffa_demo.adb 1e4b961e54fbfcea9605a60c667b7f88bfa5c81481a765e9d256592542bf7e7c4f9a831a4702e4a8cf324ddb04b1ed106e76be33fcc6d6cc05bd5238150184e2
+@@ -0,0 +1,27 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with Demo_Ch1; use Demo_Ch1;
++
++procedure FFA_Demo is
++begin
++   
++   Demo_Add_Sub;
++   
++end FFA_Demo;
+diff -uNr a/ffa/ffademo/ffa_demo.gpr b/ffa/ffademo/ffa_demo.gpr
+--- a/ffa/ffademo/ffa_demo.gpr false
++++ b/ffa/ffademo/ffa_demo.gpr d6e5faee35c92b829d83f16c74ec7bcbfe66214aeb7a4ad914c5acb84b561dcf0d311d7fbddc4a9edf4d5feba462b5bfb709aa42adb9b75b40c515275b1454bd
+@@ -0,0 +1,69 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with "../libffa/ffa.gpr";
++
++project FFA_Demo is
++  
++  for Object_Dir use "obj";
++  
++  type Mode_Type is ("debug", "release");
++  Mode : Mode_Type := external ("mode", "release");
++  
++  for Languages   use ("Ada");
++  for Source_Dirs use (".");
++  for Exec_Dir    use "bin";
++  for Main        use ("ffa_demo.adb");
++  
++  package Compiler is
++     case Mode is
++        when "debug" =>
++           for Switches ("Ada")
++             use ("-g");
++        when "release" =>
++           for Switches ("Ada")
++             use ("-O2", "-fdump-scos", "-gnata", "-fstack-check",
++                  "-fdata-sections", "-ffunction-sections");
++     end case;
++  end Compiler;
++
++  package Binder is
++     case Mode is
++        when "debug" =>
++           for Switches ("Ada")
++             use ();
++        when "release" =>
++           for Switches ("Ada")
++             use ("-static");
++     end case;
++  end Binder;
++
++  package Linker is
++     case Mode is
++        when "debug" =>
++           for Switches ("Ada")
++             use ();
++        when "release" =>
++           for Switches ("Ada")
++             use ("-Wl,--gc-sections",
++                  "-static");
++     end case;
++  end Linker;
++  
++end FFA_Demo;
+diff -uNr a/ffa/ffademo/ffa_io.adb b/ffa/ffademo/ffa_io.adb
+--- a/ffa/ffademo/ffa_io.adb false
++++ b/ffa/ffademo/ffa_io.adb 408328bdcb8543bff0e7adfd454105c5b1876c7ee71ef41337622bd95d269188f6643fd8bf9ea6076692aefc59e63a9a02b986b7c4c697b76a3ea0b69a4ffb87
+@@ -0,0 +1,61 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with Ada.Text_IO; use Ada.Text_IO;
++
++with Words;    use Words;
++with W_Shifts; use W_Shifts;
++with FZ_Type;  use FZ_Type;
++
++
++package body FFA_IO is
++   
++   -- Obtain the WChars corresponding to the given Word
++   function W_To_WChars(N : Word) return WChars is
++      H      : constant array(0 .. 15) of Character := "0123456789ABCDEF";
++      W      : Word := N;
++      Result : WChars;
++   begin
++      for b in WChars'Range loop               -- From bottom to top:
++         Result(B) := H(Natural(W and 16#F#)); -- Get current nibble.
++         W         := Shift_Right(W, 4);       -- Get the next nibble.
++      end loop;
++      return Result;
++   end W_To_WChars;
++   
++   
++   -- Display a hex representation of W to stdout
++   procedure Dump(W : in Word) is
++      T : WChars := W_To_WChars(W);
++   begin
++      for i in reverse T'Range loop
++         Put(T(i));
++      end loop;
++   end Dump;
++   
++   
++   -- Display a hex representation of N to stdout
++   procedure Dump(N : in FZ) is
++   begin
++      for i in reverse N'Range loop
++         Dump(N(i));
++      end loop;
++   end Dump;
++   
++end FFA_IO;
+diff -uNr a/ffa/ffademo/ffa_io.ads b/ffa/ffademo/ffa_io.ads
+--- a/ffa/ffademo/ffa_io.ads false
++++ b/ffa/ffademo/ffa_io.ads de4ff4dfc81df4a4febc2b5a1c359df912969821fb3790d51d78eed6352fa52d03eb70a9226ef896cee16dcfc40ab2facb9fd49d54110fb86f3febd8caf29e64
+@@ -0,0 +1,37 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with Words;   use Words;
++with FZ_Type; use FZ_Type;
++
++package FFA_IO is
++   
++   -- Character representation of a Word
++   type WChars is array(1 .. 2 * Byteness) of Character;
++   
++   -- Obtain the WChars corresponding to the given Word
++   function W_To_WChars(N : Word) return WChars;
++   
++   -- Display a hex representation of W to stdout
++   procedure Dump(W : in Word);
++   
++   -- Display a hex representation of N to stdout
++   procedure Dump(N : in FZ);
++   
++end FFA_IO;
+diff -uNr a/ffa/ffademo/obj/README b/ffa/ffademo/obj/README
+--- a/ffa/ffademo/obj/README false
++++ b/ffa/ffademo/obj/README 5fdbae897eb301a711bf95707f329517db540e34c182a5beec96e93d5d0d856cec2ed6b01c1191f865e8d1c45709a462c70c3005d4aa3676eb445d1479edf2e5
+@@ -0,0 +1 @@
++Placeholder.
+diff -uNr a/ffa/libffa/README b/ffa/libffa/README
+--- a/ffa/libffa/README false
++++ b/ffa/libffa/README b8dbe89a3d907943ed0a96ef2eb23550a00fe344c5396becc747ba8d64e1ba2d45baf32e4dca24630d4a2b75297fd1b79402592c07dd2949666f4a72c14406c9
+@@ -0,0 +1,27 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++to clean:
++gprclean
++
++to build:
++gprbuild
++
++to build debug, or on crapple:
++gprbuild -Xmode=debug
+diff -uNr a/ffa/libffa/ffa.gpr b/ffa/libffa/ffa.gpr
+--- a/ffa/libffa/ffa.gpr false
++++ b/ffa/libffa/ffa.gpr 92d0220a48f6753fb699220db8eba867b4f4354291c3e4ebd6b3048982524e93f82356d40b8bf2371f7c6768545fe2ee0e531ebd70144cbd8213a6d8c84e727e
+@@ -0,0 +1,62 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++project FFA is
++  
++  for Object_Dir use "obj";
++  
++  type Mode_Type is ("debug", "release");
++  Mode : Mode_Type := external ("mode", "release");
++  
++  for Languages         use ("Ada");
++  for Source_Dirs       use (".");
++  for Library_Dir       use "lib";
++  for Library_Name      use "FFA";
++  for Library_Kind      use "static";
++  
++  package Binder is
++     case Mode is
++        when "debug" =>
++           for Switches ("Ada")
++             use ();
++        when "release" =>
++           for Switches ("Ada")
++             use ("-static", "-r");
++     end case;
++  end Binder;
++
++  package Builder is
++     for Switches ("Ada")
++       use ("-nostdlib");
++  end Builder;
++
++  package Compiler is
++     case Mode is
++        when "debug" =>
++           for Switches ("Ada")
++             use ("-g");
++        when "release" =>
++           for Switches ("Ada")
++             use ("-O2", "-fdump-scos", "-gnata", "-fstack-check",
++                  "-fdata-sections", "-ffunction-sections",
++                  "-gnatec=" & FFA'Project_Dir & "restrict.adc");
++     end case;
++  end Compiler;
++
++end FFA;
+diff -uNr a/ffa/libffa/fz_arith.adb b/ffa/libffa/fz_arith.adb
+--- a/ffa/libffa/fz_arith.adb false
++++ b/ffa/libffa/fz_arith.adb ee90484dc801b605ddc2db7b3dce4c95a6b99f59577253d40e437f94ea6e89534137102a68dab20b46d0ea1f8c7ba625258e7073102859ad764020989b95fa7c
+@@ -0,0 +1,68 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with Word_Ops; use Word_Ops;
++
++-- Fundamental Arithmetic operators on FZ:
++package body FZ_Arith is
++   
++   -- Sum := X + Y; Overflow := Carry
++   procedure FZ_Add(X          : in  FZ;
++                    Y          : in  FZ;
++                    Sum        : out FZ;
++                    Overflow   : out WBool) is
++      Carry : WBool := 0;
++   begin
++      for i in X'Range loop
++         declare
++            A : constant Word := X(I);
++            B : constant Word := Y(I);
++            S : constant Word := A + B + Carry;
++         begin
++            Sum(i) := S;
++            Carry  := W_Carry(A, B, S);
++         end;
++      end loop;
++      Overflow := Carry;
++   end FZ_Add;
++   pragma Inline_Always(FZ_Add);
++   
++   
++   -- Difference := X - Y; Underflow := Borrow
++   procedure FZ_Sub(X          : in  FZ;
++                    Y          : in  FZ;
++                    Difference : out FZ;
++                    Underflow  : out WBool) is
++      Borrow : WBool := 0;
++   begin
++      for i in 0 .. Word_Index(X'Length - 1) loop
++         declare
++            A : constant Word := X(X'First + i);
++            B : constant Word := Y(Y'First + i);
++            S : constant Word := A - B - Borrow;
++         begin
++            Difference(Difference'First + i) := S;
++            Borrow := W_Borrow(A, B, S);
++         end;
++      end loop;
++      Underflow := Borrow;
++   end FZ_Sub;
++   pragma Inline_Always(FZ_Sub);
++   
++end FZ_Arith;
+diff -uNr a/ffa/libffa/fz_arith.ads b/ffa/libffa/fz_arith.ads
+--- a/ffa/libffa/fz_arith.ads false
++++ b/ffa/libffa/fz_arith.ads 614ad5186cb1fe04e3019af0e9ec9ae3f70b82eee7f2d7436be2c23a256677c76e2edc91f6df9e50a443ef03aeaa78ff86a2b83c8f0bf5326427af3c9ba2e9b5
+@@ -0,0 +1,42 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with Words;   use Words;
++with FZ_Type; use FZ_Type;
++
++-- Fundamental Arithmetic operators on FZ:
++package FZ_Arith is
++   
++   pragma Pure;
++   
++   -- Sum := X + Y; Overflow := Carry
++   procedure FZ_Add(X          : in    FZ;
++                    Y          : in    FZ;
++                    Sum        : out   FZ;
++                    Overflow   : out   WBool);
++   pragma Precondition(X'Length = Y'Length and X'Length = Sum'Length);
++   
++   -- Difference := X - Y; Underflow := Borrow
++   procedure FZ_Sub(X          : in  FZ;
++                    Y          : in  FZ;
++                    Difference : out FZ;
++                    Underflow  : out WBool);
++   pragma Precondition(X'Length = Y'Length and X'Length = Difference'Length);
++   
++end FZ_Arith;
+diff -uNr a/ffa/libffa/fz_type.ads b/ffa/libffa/fz_type.ads
+--- a/ffa/libffa/fz_type.ads false
++++ b/ffa/libffa/fz_type.ads c53d7e85e48b1c7ba062aec40e7d95c2230ee1d09f70dc19681b7759ee1f07f2aa599764ae2742fd3af4fb6cbdd599eac0e0c4e1f4f07c11b0f843efb73b02e5
+@@ -0,0 +1,47 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++-- FZ -- the fundamental FZ type: an unsigned integer of fixed width,
++-- i.e. a contiguous array of machine words. There is no 'meta'-anything:
++-- in particular, there is no normalization nor will there ever be any
++-- normalization, nor any provisions for resizing, nor any such thing.
++-- Note that endianness is irrelevant, here and elsewhere in FFA.
++
++with Words; use Words;
++
++package FZ_Type is
++   
++   pragma Pure;
++   
++   -- Indices of all indexable items:
++   type Indices is new Natural;
++   
++   -- Index of a particular Word in an FZ:
++   subtype Word_Index is Indices;
++   
++   -- The FZ, in person! I.e. a bignum of permanently fixed bitness.
++   type FZ is array(Word_Index range <>) of Word;
++   
++   -- A count of Words in an FZ (cannot be 0):
++   subtype Word_Count is Indices range 1 .. Indices'Last;
++   
++   -- An index of a particular ~bit~ in an FZ:
++   subtype FZBit_Index is Indices;
++   
++end FZ_Type;
+diff -uNr a/ffa/libffa/iron.ads b/ffa/libffa/iron.ads
+--- a/ffa/libffa/iron.ads false
++++ b/ffa/libffa/iron.ads 9be8930649f097919664873a6f502d6c0a2e67bb36df1f61db80b291162b2de3644837694290ff253e045499f9ebd138d84cc7d127a3b7c91838e550dc01836d
+@@ -0,0 +1,41 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++package Iron is
++   
++   pragma Pure;
++   
++   --------------------------------------
++   -------- For a 64-bit system: --------
++   --------------------------------------
++   MachineBitness     : constant Positive := 64;
++   MachineBitnessLog2 : constant Positive := 6; -- log2(64)
++   --------------------------------------
++   
++   --------------------------------------
++   -------- For a 32-bit system: --------
++   --------------------------------------
++   --  MachineBitness     : constant Positive := 32;
++   --  MachineBitnessLog2 : constant Positive := 5; -- log2(32)
++   --------------------------------------
++   
++   -- Bits per Byte
++   ByteBits           : constant Positive := 8;
++   
++end Iron;
+diff -uNr a/ffa/libffa/lib/README b/ffa/libffa/lib/README
+--- a/ffa/libffa/lib/README false
++++ b/ffa/libffa/lib/README 5fdbae897eb301a711bf95707f329517db540e34c182a5beec96e93d5d0d856cec2ed6b01c1191f865e8d1c45709a462c70c3005d4aa3676eb445d1479edf2e5
+@@ -0,0 +1 @@
++Placeholder.
+diff -uNr a/ffa/libffa/obj/README b/ffa/libffa/obj/README
+--- a/ffa/libffa/obj/README false
++++ b/ffa/libffa/obj/README 5fdbae897eb301a711bf95707f329517db540e34c182a5beec96e93d5d0d856cec2ed6b01c1191f865e8d1c45709a462c70c3005d4aa3676eb445d1479edf2e5
+@@ -0,0 +1 @@
++Placeholder.
+diff -uNr a/ffa/libffa/restrict.adc b/ffa/libffa/restrict.adc
+--- a/ffa/libffa/restrict.adc false
++++ b/ffa/libffa/restrict.adc 8040f67337558ba8ebde821ca4edd6264a8164aa9d0cf5a44f5f270c43fcac6d0033421b94d3bd5379b75b85a06300a271237d391ada11b9360865ac22bc5c5b
+@@ -0,0 +1,84 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++pragma Restrictions(Immediate_Reclamation);
++pragma Restrictions(Max_Asynchronous_Select_Nesting => 0);
++pragma Restrictions(Max_Protected_Entries => 0);
++pragma Restrictions(Max_Select_Alternatives => 0);
++pragma Restrictions(Max_Task_Entries => 0);
++pragma Restrictions(Max_Tasks => 0);
++pragma Restrictions(No_Abort_Statements);
++pragma Restrictions(No_Access_Parameter_Allocators);
++pragma Restrictions(No_Allocators);
++pragma Restrictions(No_Asynchronous_Control);
++pragma Restrictions(No_Calendar);
++pragma Restrictions(No_Coextensions);
++pragma Restrictions(No_Default_Stream_Attributes);
++pragma Restrictions(No_Delay);
++pragma Restrictions(No_Dispatch);
++pragma Restrictions(No_Dispatching_Calls);
++pragma Restrictions(No_Dynamic_Attachment);
++pragma Restrictions(No_Dynamic_Priorities);
++pragma Restrictions(No_Entry_Calls_In_Elaboration_Code);
++pragma Restrictions(No_Entry_Queue);
++pragma Restrictions(No_Enumeration_Maps);
++pragma Restrictions(No_Exception_Propagation);
++pragma Restrictions(No_Exception_Registration);
++pragma Restrictions(No_Finalization);
++pragma Restrictions(No_Fixed_Io);
++pragma Restrictions(No_Floating_Point);
++pragma Restrictions(No_Implementation_Aspect_Specifications);
++pragma Restrictions(No_Implementation_Units);
++pragma Restrictions(No_Implicit_Aliasing);
++pragma Restrictions(No_Implicit_Conditionals);
++pragma Restrictions(No_Implicit_Dynamic_Code);
++pragma Restrictions(No_Implicit_Heap_Allocations);
++pragma Restrictions(No_Implicit_Protected_Object_Allocations);
++pragma Restrictions(No_Implicit_Task_Allocations);
++pragma Restrictions(No_Initialize_Scalars);
++pragma Restrictions(No_Local_Protected_Objects);
++pragma Restrictions(No_Local_Timing_Events);
++pragma Restrictions(No_Multiple_Elaboration);
++pragma Restrictions(No_Nested_Finalization);
++pragma Restrictions(No_Protected_Type_Allocators);
++pragma Restrictions(No_Protected_Types);
++pragma Restrictions(No_Relative_Delay);
++pragma Restrictions(No_Requeue_Statements);
++pragma Restrictions(No_Secondary_Stack);
++pragma Restrictions(No_Select_Statements);
++pragma Restrictions(No_Specific_Termination_Handlers);
++pragma Restrictions(No_Standard_Allocators_After_Elaboration);
++pragma Restrictions(No_Stream_Optimizations);
++pragma Restrictions(No_Streams);
++pragma Restrictions(No_Task_Allocators);
++pragma Restrictions(No_Task_At_Interrupt_Priority);
++pragma Restrictions(No_Task_Attributes_Package);
++pragma Restrictions(No_Task_Hierarchy);
++pragma Restrictions(No_Tasking);
++pragma Restrictions(No_Task_Termination);
++pragma Restrictions(No_Terminate_Alternatives);
++pragma Restrictions(No_Unchecked_Access);
++pragma Restrictions(No_Unchecked_Conversion);
++pragma Restrictions(No_Unchecked_Deallocation);
++pragma Restrictions(No_Wide_Characters);
++pragma Restrictions(Pure_Barriers);
++pragma Restrictions(Simple_Barriers);
++pragma Restrictions(Static_Priorities);
++pragma Restrictions(Static_Storage_Size);
++pragma Validity_Checks(ALL_CHECKS);
+diff -uNr a/ffa/libffa/w_shifts.ads b/ffa/libffa/w_shifts.ads
+--- a/ffa/libffa/w_shifts.ads false
++++ b/ffa/libffa/w_shifts.ads 531bbaa56146a75cf0632abd688c4fb260de0f3bcba9c841a6f4868d3b8a3769fe05c42c5e290a1c573425f5583647ee2c41f6fe24e428b66c745ed52467dce6
+@@ -0,0 +1,58 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with Words; use Words;
++
++-- For some peculiar reason, the Ada standards group made
++-- the fundamental Shift and Rotate bitwise ops into ~optional~ components!
++
++-- However on GNAT we can force them to exist, as described in:
++-- https://gcc.gnu.org/onlinedocs/gnat_rm/Shifts-and-Rotates.html
++
++-- On a non-GNAT compiler, you're own your own.
++
++package W_Shifts is
++   
++   pragma Pure;
++   
++   function Shift_Left
++     (Value  : Word; 
++      Amount : Natural)
++     return    Word;
++   pragma Import(Intrinsic, Shift_Left);
++   
++   function Shift_Right
++     (Value  : Word; 
++      Amount : Natural)
++     return    Word;
++   pragma Import(Intrinsic, Shift_Right);
++   
++   function Rotate_Left
++     (Value  : Word; 
++      Amount : Natural)
++     return    Word;
++   pragma Import(Intrinsic, Rotate_Left);
++   
++   function Rotate_Right
++     (Value  : Word; 
++      Amount : Natural)
++     return    Word;
++   pragma Import(Intrinsic, Rotate_Right);
++   
++end W_Shifts;
+diff -uNr a/ffa/libffa/word_ops.adb b/ffa/libffa/word_ops.adb
+--- a/ffa/libffa/word_ops.adb false
++++ b/ffa/libffa/word_ops.adb 7ca5191747d159092841af1d29a5779075ab1c74f3ccaa94b187dc135d76819034ca9666ae01abc3212d47a2bddf06a56dad178591646225b17e11801cdeebac
+@@ -0,0 +1,101 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with W_Shifts; use W_Shifts;
++
++-- Fundamental Operations on Words:
++package body Word_Ops is
++   
++   -- Ada (like C) does not (portably) tell us over/underflow from arithmetic.
++   -- And there existed in the past, and apparently exist today, CPUs made
++   -- by idiots and wreckers (e.g. 'RISC-V') that do not have flags at all!
++   
++   -- However, for multi-word addition, subtraction, the inner loop of
++   -- Comba's multiplication, and for a handful of other ops, we need it!
++   
++   -- So we derive the Carry or Borrow at the 'eldest' binary position.
++   -- See the elementary proof (base case: 1 bit) further below:
++   
++   -- Find the Carry, from an addition where it is known that A + B == S:
++   function W_Carry(A : in Word; B : in Word; S : in Word)
++                   return WBool is
++   begin
++      return WBool(Shift_Right((A and B) or ((A or B) and (not S)),
++                               Bitness - 1));
++   end W_Carry;
++   pragma Inline_Always(W_Carry);
++   
++   
++   -- Find the Borrow, from a subtraction where it is known that A - B == D:
++   function W_Borrow(A : in Word; B : in Word; D : in Word)
++                    return WBool is
++   begin
++      return WBool(Shift_Right(((not A) and B) or (((not A) or B) and D),
++                               Bitness - 1));
++   end W_Borrow;
++   pragma Inline_Always(W_Borrow);
++   
++   -- A+B+C is the output bit of 1-bit adder; C is carry-in;
++   -- A-B-C is the output bit of 1-bit subber; C is borrow-in.
++   -- Observe that A+B+C is equal to A-B-C for all A,B,C !
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  |           | 'Carry' out: |     | 'Borrow' out:  |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  | | | |     |(a and b) or  |     |(~a and b) or   |
++   --  |A|B|C|A+B+C| ((a or b) and|A-B-C| ((~a or b) and |
++   --  | | | |     |    ~(A+B+C)) |     |    (A-B-C))    |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  |0|0|0|  0  |      0       |  0  |       0        |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  |1|0|0|  1  |      0       |  1  |       0        |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  |0|1|0|  1  |      0       |  1  |       1        |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  |1|1|0|  0  |      1       |  0  |       0        |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  |0|0|1|  1  |      0       |  1  |       1        |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  |1|0|1|  0  |      1       |  0  |       0        |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  |0|1|1|  0  |      1       |  0  |       1        |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   --  |1|1|1|  1  |      1       |  1  |       1        |
++   --  +-+-+-+-----+--------------+-----+----------------+
++   -- This base case extends to any N bit register, since
++   -- both equations depend ~strictly~ on A, B, and C.
++   
++   
++   -- Without any branching: if Sel == 0, return A; if Sel == 1, return B.
++   function W_Mux(A : in Word; B : in Word; Sel : in WBool) return Word is
++   begin
++      return B xor ((Sel - 1) and (A xor B));
++   end W_Mux;
++   pragma Inline_Always(W_Mux);
++   
++   
++   -- Exchange A and B.
++   procedure W_Swap(A : in out Word; B : in out Word) is
++   begin
++      A := A xor B;
++      B := A xor B;
++      A := A xor B;
++   end W_Swap;
++   pragma Inline_Always(W_Swap);
++   
++end Word_Ops;
+diff -uNr a/ffa/libffa/word_ops.ads b/ffa/libffa/word_ops.ads
+--- a/ffa/libffa/word_ops.ads false
++++ b/ffa/libffa/word_ops.ads 991563401e923b6d1448644d1ad8fe238e79f5154f98d7317d38227c5856d6cfb55fcee27c5dda316e70464a3f234831358b58d9b409cf2d5db90aa1f38d9e92
+@@ -0,0 +1,42 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with Words; use Words;
++
++-- Fundamental Operations on Words:
++package Word_Ops is
++   
++   pragma Pure;
++   
++   -- Branch-free calculation of 'carry' from a machine-word addition.
++   function W_Carry(A : in Word; B : in Word; S : in Word)
++                   return WBool;
++   
++   -- Branch-free calculation of 'borrow' from a machine-word subtraction.
++   function W_Borrow(A : in Word; B : in Word; D : in Word)
++                    return WBool;
++   
++   -- Without any branching: if Sel == 0, return A; if Sel == 1, return B.
++   function W_Mux(A : in Word; B : in Word; Sel : in WBool)
++                 return Word;
++   
++   -- Exchange A and B.
++   procedure W_Swap(A : in out Word; B : in out Word);
++   
++end Word_Ops;
+diff -uNr a/ffa/libffa/words.ads b/ffa/libffa/words.ads
+--- a/ffa/libffa/words.ads false
++++ b/ffa/libffa/words.ads 81a4bf46abd4b92f58b791872c94193606e9847f7c232aa604f91b71412f0b9732d23be295810596355b68b8111ef5102bb7778dcb2fe987c948490a95b49ccd
+@@ -0,0 +1,46 @@
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
++--                                                                          --
++-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
++-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
++--                                                                          --
++-- You do not have, nor can you ever acquire the right to use, copy or      --
++-- distribute this software ; Should you use this software for any purpose, --
++-- or copy and distribute it to anyone or in any manner, you are breaking   --
++-- the laws of whatever soi-disant jurisdiction, and you promise to         --
++-- continue doing so for the indefinite future. In any case, please         --
++-- always : read and understand any software ; verify any PGP signatures    --
++-- that you use - for any purpose.                                          --
++--                                                                          --
++-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
++------------------------------------------------------------------------------
++------------------------------------------------------------------------------
++
++with Iron;
++
++package Words is
++   
++   pragma Pure;
++   
++   -- The most fundamental fact about Word: width.
++   Bitness     : constant Positive := Iron.MachineBitness;
++   
++   -- It is possible to calculate BitnessLog2 at elaboration time,
++   -- but we will avoid having ~any~ elaboration at all in FFA.
++   BitnessLog2 : constant Positive := Iron.MachineBitnessLog2;
++   
++   -- The Word width, expressed in ~bytes~:
++   Byteness    : constant Positive := Bitness / Iron.ByteBits;
++   
++   -- What kind of words to use. Must be machine-word or smaller.
++   type Word is mod 2**Bitness;
++   for Word'Size use Bitness;
++   
++   -- The very same Word, but its only legal values are 0 and 1.
++   subtype WBool is Word range 0 .. 1;
++   
++   -- When we must refer to individual bit positions of a machine word:
++   subtype WBit_Index is Natural range 0 .. Bitness - 1;
++   
++end Words;

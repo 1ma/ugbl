@@ -1,0 +1,69 @@
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+-- This file is part of 'Finite Field Arithmetic', aka 'FFA'.               --
+--                                                                          --
+-- (C) 2017 Stanislav Datskovskiy ( www.loper-os.org )                      --
+-- http://wot.deedbot.org/17215D118B7239507FAFED98B98228A001ABFFC7.html     --
+--                                                                          --
+-- You do not have, nor can you ever acquire the right to use, copy or      --
+-- distribute this software ; Should you use this software for any purpose, --
+-- or copy and distribute it to anyone or in any manner, you are breaking   --
+-- the laws of whatever soi-disant jurisdiction, and you promise to         --
+-- continue doing so for the indefinite future. In any case, please         --
+-- always : read and understand any software ; verify any PGP signatures    --
+-- that you use - for any purpose.                                          --
+--                                                                          --
+-- See also http://trilema.com/2015/a-new-software-licensing-paradigm .     --
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+with "../libffa/ffa.gpr";
+
+project FFA_Demo is
+  
+  for Object_Dir use "obj";
+  
+  type Mode_Type is ("debug", "release");
+  Mode : Mode_Type := external ("mode", "release");
+  
+  for Languages   use ("Ada");
+  for Source_Dirs use (".");
+  for Exec_Dir    use "bin";
+  for Main        use ("ffa_demo.adb");
+  
+  package Compiler is
+     case Mode is
+        when "debug" =>
+           for Switches ("Ada")
+             use ("-g");
+        when "release" =>
+           for Switches ("Ada")
+             use ("-O2", "-fdump-scos", "-gnata", "-fstack-check",
+                  "-fdata-sections", "-ffunction-sections");
+     end case;
+  end Compiler;
+
+  package Binder is
+     case Mode is
+        when "debug" =>
+           for Switches ("Ada")
+             use ();
+        when "release" =>
+           for Switches ("Ada")
+             use ("-static");
+     end case;
+  end Binder;
+
+  package Linker is
+     case Mode is
+        when "debug" =>
+           for Switches ("Ada")
+             use ();
+        when "release" =>
+           for Switches ("Ada")
+             use ("-Wl,--gc-sections",
+                  "-static");
+     end case;
+  end Linker;
+  
+end FFA_Demo;
