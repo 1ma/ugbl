@@ -18,18 +18,18 @@
 ------------------------------------------------------------------------------
 
 project FFA is
-  
+
   for Object_Dir use "obj";
-  
+
   type Mode_Type is ("debug", "release");
   Mode : Mode_Type := external ("mode", "release");
-  
+
   for Languages         use ("Ada");
   for Source_Dirs       use (".");
   for Library_Dir       use "lib";
   for Library_Name      use "FFA";
   for Library_Kind      use "static";
-  
+
   package Binder is
      case Mode is
         when "debug" =>
@@ -53,7 +53,7 @@ project FFA is
              use ("-g");
         when "release" =>
            for Switches ("Ada")
-             use ("-O2", "-fdump-scos", "-gnata", "-fstack-check",
+             use ("-O2", "-gnata", "-fstack-check",
                   "-fdata-sections", "-ffunction-sections",
                   "-gnatec=" & FFA'Project_Dir & "restrict.adc");
      end case;

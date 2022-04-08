@@ -1,0 +1,4 @@
+# .gitignore file for FFA build objects
+
+**/ffademo/bin/
+**/libffa/lib

@@ -21,7 +21,7 @@ with Word_Ops; use Word_Ops;
 
 -- Fundamental Arithmetic operators on FZ:
 package body FZ_Arith is
-   
+
    -- Sum := X + Y; Overflow := Carry
    procedure FZ_Add(X          : in  FZ;
                     Y          : in  FZ;
@@ -41,9 +41,7 @@ package body FZ_Arith is
       end loop;
       Overflow := Carry;
    end FZ_Add;
-   pragma Inline_Always(FZ_Add);
-   
-   
+
    -- Difference := X - Y; Underflow := Borrow
    procedure FZ_Sub(X          : in  FZ;
                     Y          : in  FZ;
@@ -63,6 +61,5 @@ package body FZ_Arith is
       end loop;
       Underflow := Borrow;
    end FZ_Sub;
-   pragma Inline_Always(FZ_Sub);
-   
+
 end FZ_Arith;

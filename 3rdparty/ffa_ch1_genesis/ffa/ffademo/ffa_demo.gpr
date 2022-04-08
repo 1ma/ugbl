@@ -20,17 +20,17 @@
 with "../libffa/ffa.gpr";
 
 project FFA_Demo is
-  
+
   for Object_Dir use "obj";
-  
+
   type Mode_Type is ("debug", "release");
   Mode : Mode_Type := external ("mode", "release");
-  
+
   for Languages   use ("Ada");
   for Source_Dirs use (".");
   for Exec_Dir    use "bin";
   for Main        use ("ffa_demo.adb");
-  
+
   package Compiler is
      case Mode is
         when "debug" =>
@@ -38,7 +38,7 @@ project FFA_Demo is
              use ("-g");
         when "release" =>
            for Switches ("Ada")
-             use ("-O2", "-fdump-scos", "-gnata", "-fstack-check",
+             use ("-O2", "-gnata", "-fstack-check",
                   "-fdata-sections", "-ffunction-sections");
      end case;
   end Compiler;
@@ -65,5 +65,5 @@ project FFA_Demo is
                   "-static");
      end case;
   end Linker;
-  
+
 end FFA_Demo;

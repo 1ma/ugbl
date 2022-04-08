@@ -21,22 +21,26 @@ with Words; use Words;
 
 -- Fundamental Operations on Words:
 package Word_Ops is
-   
+
    pragma Pure;
-   
+
    -- Branch-free calculation of 'carry' from a machine-word addition.
    function W_Carry(A : in Word; B : in Word; S : in Word)
                    return WBool;
-   
+   pragma Inline_Always(W_Carry);
+
    -- Branch-free calculation of 'borrow' from a machine-word subtraction.
    function W_Borrow(A : in Word; B : in Word; D : in Word)
                     return WBool;
-   
+   pragma Inline_Always(W_Borrow);
+
    -- Without any branching: if Sel == 0, return A; if Sel == 1, return B.
    function W_Mux(A : in Word; B : in Word; Sel : in WBool)
                  return Word;
-   
+   pragma Inline_Always(W_Mux);
+
    -- Exchange A and B.
    procedure W_Swap(A : in out Word; B : in out Word);
-   
+   pragma Inline_Always(W_Swap);
+
 end Word_Ops;

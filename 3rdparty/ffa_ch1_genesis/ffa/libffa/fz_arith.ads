@@ -22,21 +22,23 @@ with FZ_Type; use FZ_Type;
 
 -- Fundamental Arithmetic operators on FZ:
 package FZ_Arith is
-   
+
    pragma Pure;
-   
+
    -- Sum := X + Y; Overflow := Carry
    procedure FZ_Add(X          : in    FZ;
                     Y          : in    FZ;
                     Sum        : out   FZ;
                     Overflow   : out   WBool);
    pragma Precondition(X'Length = Y'Length and X'Length = Sum'Length);
-   
+   pragma Inline_Always(FZ_Add);
+
    -- Difference := X - Y; Underflow := Borrow
    procedure FZ_Sub(X          : in  FZ;
                     Y          : in  FZ;
                     Difference : out FZ;
                     Underflow  : out WBool);
    pragma Precondition(X'Length = Y'Length and X'Length = Difference'Length);
-   
+   pragma Inline_Always(FZ_Sub);
+
 end FZ_Arith;
